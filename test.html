@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div>SDK test</div>
+    <script>
+            (function (i, s, o, g, r, a, m) {
+                i['OTO_ObjectName'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+       
+            })(window, document, 'script', 'tracking.js', 'OTO');
+            OTO("init",{client:"clientID"});
+            OTO("pageview");
+            /** 
+OTO('event',{
+    name:"n",
+    action:"a",
+    label:"l",
+    value:"v"
+});
+*/
+        </script>
+</body>
+
+</html>

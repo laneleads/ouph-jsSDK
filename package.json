@@ -1,0 +1,31 @@
+{
+  "name": "ouph-jssdk",
+  "version": "1.0.0",
+  "description": "ouph analytics platform jsSDK",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "web analytics",
+    "mobile analytics",
+    "big data",
+    "analysis",
+    "ouph analytics",
+    "js sdk"
+  ],
+  "scripts": {
+    "start": "node app.js",
+    "publish": "gulp"
+  },
+  "author": "tant",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.8.8",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0"
+  }
+}
