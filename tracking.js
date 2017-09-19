@@ -3,9 +3,10 @@
     var apiVersion = 'v1',
         clientVersion = "20161006",
         defaultCookie = "_oto",
-        defaultUrl = "http://localhost/collect",
+        defaultUrl = "/collect",
         sessionTime = 1800;
-    var documentAlias = window.document,
+    var isDebug = false,
+        documentAlias = window.document,
         navigatorAlias = window.navigator,
         screenAlias = window.screen,
         windowAlias = window,
@@ -25,6 +26,7 @@
             trackingObject[arguments[0]].apply(undefined, arguments);
         }
         else {
+            console.log("ERROR:OTO");
             console.log(arguments[0]);
         }
 
@@ -37,7 +39,6 @@
         var array = [];
         this.set = function (a) {
             array.push(a)
-            //console.log(a);
         };
         this.get = function () {
             return array.join('');
@@ -48,16 +49,22 @@
         init: function () {
             usageLog.set('I');
             if (arguments.length != 2) {
+                console.log("ERROR:init[arguments]");
                 console.log(arguments);
                 return;
             }
             var setting = arguments[1];
             if (!isString(setting.client)) {
+                console.log("ERROR:init[client]");
                 console.log(setting);
                 return;
             }
             if (isDefined(setting.uid)) {
                 param['uid'] = setting.uid;
+            }
+            if (isDefined(setting.debug)) {
+                console.log("DEBUG:enabled");
+                isDebug = true;
             }
             var cookiesName = isString(setting.cookie) ? setting.cookie : defaultCookie;
             var cookieString = getCookie(cookiesName);
@@ -71,7 +78,7 @@
             }
             else {
                 var cookieArr = cookieString.split('.'), h;
-                
+
                 if (cookieArr.length == 4 && (h = cookieArr.pop(), h == gahash(cookieArr.join('.')))) {
                     if (time - cookieArr[2] <= sessionTime) {
                         cookieString = genCookie(cookieArr[0], cookieArr[1], time);
@@ -142,7 +149,7 @@
         pageview: function () {
             usageLog.set('p');
             if (!isCreated) {
-                console.log("error pageview");
+                console.log("ERROR:pageview");
                 return;
             }
             var arrayparam = [];
@@ -159,17 +166,19 @@
         event: function () {
             usageLog.set('e');
             if (!isCreated) {
-                console.log("error event");
+                console.log("ERROR:event");
                 return;
             }
 
             if (arguments.length != 2) {
+                console.log("ERROR:event[arguments]");
                 console.log(arguments);
                 return;
             }
 
             var event = arguments[1];
             if (!isString(event.name) || !isString(event.label) || !isString(event.action)) {
+                console.log("ERROR:event[null]");
                 console.log(event);
                 return;
             }
@@ -191,21 +200,23 @@
     function sendRequest(datas) {
 
         datas = datas + "&_=" + (new Date).getTime();
-        //console.log(datas);
-
-        if (navigatorAlias.sendBeacon) {
-            datas = datas + "&usage=" + usageLog.get() + 'b';
-            navigatorAlias.sendBeacon(defaultUrl, datas)
-        } else
-
-
-            if (2036 >= datas.length) {
+        if (isDebug) {
+            console.log("DEBUG:sendRequest");
+            console.log(datas);
+            datas = datas + "&usage=" + usageLog.get() + '_d';
+            XMLHttpRequest(defaultUrl, datas);
+        } else {
+            if (navigatorAlias.sendBeacon) {
+                datas = datas + "&usage=" + usageLog.get() + 'b';
+                navigatorAlias.sendBeacon(defaultUrl, datas)
+            } else if (2036 >= datas.length) {
                 datas = datas + "&usage=" + usageLog.get() + 'm';
                 imageRequest(defaultUrl, datas);
             } else if (8192 >= datas.length) {
                 datas = datas + "&usage=" + usageLog.get() + 'x';
                 XMLHttpRequest(defaultUrl, datas);
             }
+        }
     };
     function XMLHttpRequest(a, b) {
         var d = windowAlias.XMLHttpRequest;
@@ -214,7 +225,6 @@
         if (!("withCredentials" in e)) return false;
         e.open("POST", a, true);
         e.withCredentials = true;
-        //console.log(e.withCredentials);
         e.setRequestHeader("Content-Type", "text/plain");
         e.onreadystatechange = function () {
             4 == e.readyState && (e = null);
@@ -556,4 +566,4 @@
         }
     })();
 
-} (window));
+}(window));

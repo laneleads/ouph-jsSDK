@@ -45,7 +45,7 @@ var mime = {
 
 }
 var server = http.createServer(function (req, res) {
-    console.log(req.url);
+    console.log(req.method+" "+ req.url);
     if (req.method == 'POST') {
       
     req.on('data', function(chunk) {
