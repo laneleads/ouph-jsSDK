@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var apiVersion = 'v1',
-        clientVersion = "20161006",
+        clientVersion = "20170919",
         defaultCookie = "_oto",
         defaultUrl = "/collect",
         sessionTime = 1800;
